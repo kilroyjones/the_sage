@@ -5,6 +5,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_apscheduler import APScheduler
+from flask_cors import CORS
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -19,6 +20,7 @@ finnhub_client = finnhub.Client(api_key=app.config["FINN_KEY"])
 db = SQLAlchemy(app)
 db.init_app(app)
 migrate = Migrate(app, db)  # this
+CORS(app)
 
 scheduler = APScheduler()
 scheduler.init_app(app)
