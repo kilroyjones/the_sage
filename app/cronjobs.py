@@ -5,8 +5,8 @@ from app.models import Holding, Ticker
 from sqlalchemy.sql.expression import func, select
 
 
-# @scheduler.task("interval", id="update_holdings", seconds=30, misfire_grace_time=900)
-@scheduler.task("interval", id="update_holdings", minutes=30, misfire_grace_time=900)
+# @scheduler.task("interval", id="update_holdings", seconds=3, misfire_grace_time=900)
+# @scheduler.task("interval", id="update_holdings", minutes=30, misfire_grace_time=900)
 def update_holdings():
     holdings = Holding.query.filter_by(date_inactive=None)
     count = 0
@@ -19,13 +19,14 @@ def update_holdings():
             time.sleep(1)
 
 
-# @scheduler.task("interval", id="create_holding", seconds=30, misfire_grace_time=900)
-@scheduler.task("interval", id="create_holding", hours=72, misfire_grace_time=900)
+@scheduler.task("interval", id="create_holding", seconds=3, misfire_grace_time=900)
+# @scheduler.task("interval", id="create_holding", hours=72, misfire_grace_time=900)
 def create_holding():
     stock = Ticker.query.order_by(func.random()).first()
     quote = finnhub_client.quote(stock.ticker)
     holding = Holding(
         ticker=stock.ticker,
+        name=stock.name,
         date_active=datetime.datetime.now(),
         date_inactive=None,
         purchased_price=quote["c"],

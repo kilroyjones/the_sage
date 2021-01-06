@@ -22,10 +22,11 @@ db.init_app(app)
 migrate = Migrate(app, db)  # this
 CORS(app)
 
-scheduler = APScheduler()
-scheduler.init_app(app)
-scheduler.start()
+# scheduler = APScheduler()
+# scheduler.init_app(app)
+# scheduler.start()
 
 from app import routes
 from app.models import Ticker, Holding
-from app.cronjobs import *
+
+# from app.cronjobs import *
